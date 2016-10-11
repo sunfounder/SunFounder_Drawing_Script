@@ -36,6 +36,7 @@ PURPLE  = (153, 100, 239)
 GRID = (display_res.current_w/8, display_res.current_h/9)
 
 DRAW_BAR_RECT    = Rect(0, 0, display_res.current_w - GRID[0], display_res.current_h)
+TOOL_BAR_RECT    = Rect(DRAW_BAR_RECT.width, 0, display_res.current_w, display_res.current_h)
 BUTTON_RECT      = Rect(0, 0, GRID[0]*0.9, GRID[1]*0.9)
 EXIT_BUTTON_RECT = BUTTON_RECT.copy()
 RED_RECT         = BUTTON_RECT.copy()
@@ -80,6 +81,7 @@ def setup():
 	pygame.display.update()
 	screen.set_clip(DRAW_BAR_RECT)
 	screen.fill(WHITE)
+	pygame.display.update()
 
 def main():
 	Draw = False
@@ -88,8 +90,6 @@ def main():
 	last_pos = (0, 0)
 	while True:
 		for event in pygame.event.get():
-			if event.type == QUIT:
-				exit()
 			if event.type == MOUSEBUTTONDOWN:
 				start_point = pygame.mouse.get_pos()
 				pygame.draw.circle(screen, current_color, start_point, LINE_WIDTH/2)
@@ -99,31 +99,32 @@ def main():
 				pos = pygame.mouse.get_pos()
 
 		if Draw:
-			end_point = pygame.mouse.get_pos()
-			draw_line(current_color, start_point, end_point)
-			start_point = end_point
-		if pos != last_pos:
-			if EXIT_BUTTON_RECT.collidepoint(pos):
-				exit()
-			if RED_RECT.collidepoint(pos):
-				current_color = RED
-			if ORANGE_RECT.collidepoint(pos):
-				current_color = ORANGE
-			if YELLOW_RECT.collidepoint(pos):
-				current_color = YELLOW
-			if GREEN_RECT.collidepoint(pos):
-				current_color = GREEN
-			if CYAN_RECT.collidepoint(pos):
-				current_color = CYAN
-			if BLUE_RECT.collidepoint(pos):
-				current_color = BLUE
-			if PURPLE_RECT.collidepoint(pos):
-				current_color = PURPLE
-			if CLEAR_RECT.collidepoint(pos):
-				screen.fill(WHITE)
-			last_pos = pos
+			if pos != last_pos and TOOL_BAR_RECT.collidepoint(pos):
+				if EXIT_BUTTON_RECT.collidepoint(pos):
+					exit()
+				elif RED_RECT.collidepoint(pos):
+					current_color = RED
+				elif ORANGE_RECT.collidepoint(pos):
+					current_color = ORANGE
+				elif YELLOW_RECT.collidepoint(pos):
+					current_color = YELLOW
+				elif GREEN_RECT.collidepoint(pos):
+					current_color = GREEN
+				elif CYAN_RECT.collidepoint(pos):
+					current_color = CYAN
+				elif BLUE_RECT.collidepoint(pos):
+					current_color = BLUE
+				elif PURPLE_RECT.collidepoint(pos):
+					current_color = PURPLE
+				elif CLEAR_RECT.collidepoint(pos):
+					screen.fill(WHITE)
+				last_pos = pos
+			else:
+				end_point = pygame.mouse.get_pos()
+				draw_line(current_color, start_point, end_point)
+				start_point = end_point
 	 
-		pygame.display.update()
+			pygame.display.update()
 
 if __name__ == '__main__':
 	setup()
