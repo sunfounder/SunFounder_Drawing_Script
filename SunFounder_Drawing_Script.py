@@ -101,7 +101,7 @@ def main():
 		if Draw:
 			if pos != last_pos and TOOL_BAR_RECT.collidepoint(pos):
 				if EXIT_BUTTON_RECT.collidepoint(pos):
-					exit()
+					break
 				elif RED_RECT.collidepoint(pos):
 					current_color = RED
 				elif ORANGE_RECT.collidepoint(pos):
@@ -129,3 +129,4 @@ def main():
 if __name__ == '__main__':
 	setup()
 	main()
+	pygame.quit()
